@@ -9,8 +9,8 @@ GAME RULES:
 
 */
 
-var score, roundScore, activePlayer;
-score = [0,0];
+var scores, roundScore, activePlayer;
+scores = [0,0];
 roundScore = 0;
 activePlayer = 0;
 
@@ -37,20 +37,47 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
         roundScore += dice;
         document.querySelector("#current-" + activePlayer ).textContent = roundScore;
     }else{
-        //next player
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
-        roundScore = 0;
-
-        document.getElementById('current-0').textContent = 0;
-        document.getElementById('current-1').textContent = 0;
-
-        document.querySelector('.player-0-panel').classList.toggle('active');    
-        document.querySelector('.player-1-panel').classList.toggle('active');    
+     // next player
+     nextPlayer();
     }
 });
 
 
+document.querySelector('.btn-hold').addEventListener('click', function() {
+    //add current score to global score
+    scores[activePlayer] += roundScore; 
+    
+    //update the UI
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+    
+    //check if player win the game
+    if(scores[activePlayer] >= 20) {
+        document.querySelector('#name-' + activePlayer).textContent = 'Winner!!';
+        document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+    }else{
+    //next player
+    nextPlayer();
+    }
+});
 
+function nextPlayer() {
+        //next player
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+        roundScore = 0;
+
+        //set score value 0 when dice count 1
+        document.getElementById('current-0').textContent = 0;
+        document.getElementById('current-1').textContent = 0;
+        
+        //change the backgound color on dice count 1
+        document.querySelector('.player-0-panel').classList.toggle('active');    
+        document.querySelector('.player-1-panel').classList.toggle('active');    
+
+        // display none for the dice image when dice counter 1
+        document.querySelector('.dice').style.display = 'none';
+}
 
 
 
